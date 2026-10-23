@@ -1,0 +1,287 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sana Ikaw Na Lang | Manamba</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #ffd6e7, #ffc2d9, #fbe7ff);
+    color: #6b2145;
+}
+
+.heart {
+    position: fixed;
+    bottom: -40px;
+    font-size: 24px;
+    opacity: .6;
+    pointer-events: none;
+    animation: floatUp 8s linear infinite;
+}
+
+@keyframes floatUp {
+    from { transform: translateY(0) rotate(0); }
+    to { transform: translateY(-115vh) rotate(360deg); }
+}
+
+.card {
+    width: min(92%, 520px);
+    padding: 35px 22px;
+    text-align: center;
+    background: rgba(255,255,255,.88);
+    border: 2px solid white;
+    border-radius: 28px;
+    box-shadow: 0 20px 60px #a83d7040;
+    position: relative;
+    z-index: 2;
+}
+
+.emoji {
+    font-size: 68px;
+    margin-bottom: 10px;
+    animation: beat 1.2s infinite;
+}
+
+@keyframes beat {
+    50% { transform: scale(1.1); }
+}
+
+h1 {
+    font-size: clamp(27px, 6vw, 39px);
+    margin: 10px 0;
+}
+
+.subtitle {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #985575;
+}
+
+#choiceArea {
+    position: relative;
+    width: 100%;
+    height: 125px;
+    margin-top: 20px;
+}
+
+button {
+    border: 0;
+    border-radius: 30px;
+    padding: 14px 27px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 6px 14px #00000015;
+    transition: background .2s, transform .2s;
+}
+
+#yesBtn {
+    position: absolute;
+    left: 17%;
+    top: 28px;
+    background: #ff4f91;
+    color: white;
+}
+
+#yesBtn:hover {
+    background: #ed2877;
+    transform: scale(1.08);
+}
+
+#noBtn {
+    position: absolute;
+    left: 57%;
+    top: 28px;
+    background: #e7e7e7;
+    color: #555;
+    white-space: nowrap;
+}
+
+#message {
+    display: none;
+    margin-top: 15px;
+    padding: 20px 15px;
+    border-radius: 18px;
+    background: #fff0f6;
+    line-height: 1.8;
+    animation: appear .5s ease;
+}
+
+@keyframes appear {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+#message h2 {
+    color: #e72d78;
+}
+
+.creator {
+    margin-top: 25px;
+    color: #b47b96;
+    font-size: 12px;
+}
+
+@media (max-width: 420px) {
+    .card { padding: 28px 14px; }
+    #yesBtn { left: 8%; }
+    #noBtn { left: 55%; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <div class="emoji">💌</div>
+
+    <h1>Sana ikaw na lang ang future ko</h1>
+
+    <p class="subtitle">
+        May tanong lang ako sa'yo...<br>
+        Ready ka na bang maging part ng future ko? 🥹💗
+    </p>
+
+    <div id="choiceArea">
+        <button id="yesBtn">YES ❤️</button>
+        <button id="noBtn">NO 💔</button>
+    </div>
+
+    <div id="message">
+        <div style="font-size:55px">🥰💖</div>
+        <h2>AYIEEEE! NAG-YES KA! 😭❤️</h2>
+        <p>
+            Mag-YES ka na kasi alam mo namang
+            ayaw magpa-click ng NO! 😂
+        </p>
+        <p>
+            Screenshot mo na 'to, baka bawiin mo pa! 🤣💕
+        </p>
+        <button onclick="location.reload()">
+            Ulit tayo? 💌
+        </button>
+    </div>
+
+    <div class="creator">Created by Piolo B. Manamba Project © 2026</div>
+</div>
+
+<script>
+const area = document.getElementById("choiceArea");
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const message = document.getElementById("message");
+
+let attempts = 0;
+
+function escapeNo() {
+    const maxX = Math.max(0, area.clientWidth - noBtn.offsetWidth);
+    const maxY = Math.max(0, area.clientHeight - noBtn.offsetHeight);
+
+    let x = Math.random() * maxX;
+    let y = Math.random() * maxY;
+
+    // Lumayo sa YES button kapag kaya.
+    for (let i = 0; i < 15; i++) {
+        const yesRect = yesBtn.getBoundingClientRect();
+        const areaRect = area.getBoundingClientRect();
+
+        const yesX = yesRect.left - areaRect.left;
+        const yesY = yesRect.top - areaRect.top;
+
+        if (Math.abs(x - yesX) > 100 ||
+            Math.abs(y - yesY) > 45) break;
+
+        x = Math.random() * maxX;
+        y = Math.random() * maxY;
+    }
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+
+    attempts++;
+
+    if (attempts >= 4) {
+        noBtn.textContent = "NO? 😭";
+    }
+
+    if (attempts >= 8) {
+        noBtn.textContent = "HULI KA! 😂";
+    }
+}
+
+// Kapag nilapitan ng mouse, tatakas.
+noBtn.addEventListener("pointerenter", escapeNo);
+
+// Sa cellphone, tatakas kapag tinapik.
+noBtn.addEventListener("touchstart", function(e) {
+    e.preventDefault();
+    escapeNo();
+}, { passive: false });
+
+// Kapag nagawang pindutin, magbibigay pa rin ng choice.
+noBtn.addEventListener("click", function() {
+    const stay = confirm("Sure ka na ba sa NO? 😅");
+    if (stay) {
+        noBtn.textContent = "Okay lang naman 💗";
+        noBtn.style.position = "static";
+        noBtn.style.margin = "8px";
+        noBtn.style.cursor = "pointer";
+        noBtn.onpointerenter = null;
+    } else {
+        escapeNo();
+    }
+});
+
+// Kapag YES ang pinindot.
+yesBtn.addEventListener("click", function() {
+    message.style.display = "block";
+    area.style.display = "none";
+    document.querySelector(".emoji").textContent = "💖";
+    document.querySelector(".subtitle").textContent =
+        "Officially, may plot twist na ang love story natin! 😂";
+    launchHearts();
+});
+
+function launchHearts() {
+    for (let i = 0; i < 30; i++) {
+        setTimeout(() => {
+            const heart = document.createElement("div");
+            heart.className = "heart";
+            heart.textContent = ["💗", "💖", "💕", "❤️", "✨"][
+                Math.floor(Math.random() * 5)
+            ];
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = (3 + Math.random() * 4) + "s";
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 8000);
+        }, i * 100);
+    }
+}
+
+// Floating hearts sa background.
+for (let i = 0; i < 12; i++) {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.textContent = ["💗", "💕", "♡"][i % 3];
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDelay = (Math.random() * 8) + "s";
+    heart.style.animationDuration = (6 + Math.random() * 6) + "s";
+    document.body.appendChild(heart);
+}
+</script>
+
+</body>
+</html>
